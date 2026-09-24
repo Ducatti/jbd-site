@@ -272,14 +272,30 @@
             </ul>
           </div>
 
-          <form class="form" id="contact-form" novalidate>
+          <form class="form" id="contact-form" name="contato" method="POST" action="/obrigado.html"
+                data-netlify="true" netlify-honeypot="bot-field" novalidate>
+            <input type="hidden" name="form-name" value="contato">
+            <p class="visually-hidden" aria-hidden="true">
+              <label>Não preencha este campo: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+            </p>
+
             <div class="field">
               <label for="nome">Nome</label>
               <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" required>
             </div>
             <div class="field">
-              <label for="empresa">Empresa <span class="optional">(opcional)</span></label>
-              <input id="empresa" name="empresa" type="text" autocomplete="organization" placeholder="Nome da empresa">
+              <label for="email">E-mail</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@empresa.com.br" required>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="telefone">Telefone <span class="optional">(opcional)</span></label>
+                <input id="telefone" name="telefone" type="tel" autocomplete="tel" placeholder="(41) 90000-0000">
+              </div>
+              <div class="field">
+                <label for="empresa">Empresa <span class="optional">(opcional)</span></label>
+                <input id="empresa" name="empresa" type="text" autocomplete="organization" placeholder="Nome da empresa">
+              </div>
             </div>
             <div class="field">
               <label for="servico">Serviço de interesse</label>
@@ -300,7 +316,7 @@
               Enviar mensagem
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg>
             </button>
-            <p class="form__note" id="form-note" role="status">Ao enviar, seu aplicativo de e-mail será aberto com a mensagem pronta.</p>
+            <p class="form__note" id="form-note" role="status">Seus dados são usados apenas para responder ao seu contato.</p>
           </form>
         </div>
       </div>

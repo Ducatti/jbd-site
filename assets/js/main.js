@@ -58,46 +58,63 @@
     });
   });
 
-  // Formulário de contato: site estático, então monta um e-mail com os dados
+  // Formulário de contato: enviado ao Netlify Forms via AJAX.
+  // Sem JavaScript, o envio nativo (POST) leva para /obrigado.html.
   var form = document.getElementById("contact-form");
   var note = document.getElementById("form-note");
-  var EMAIL = "joel.ducatti@gmail.com";
+  var submitBtn = form.querySelector('button[type="submit"]');
+  var submitLabel = submitBtn.innerHTML;
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setNote(text, state) {
+    note.textContent = text;
+    note.classList.toggle("is-error", state === "error");
+    note.classList.toggle("is-success", state === "success");
+  }
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    var valid = true;
-    ["nome", "mensagem"].forEach(function (name) {
+    var checks = {
+      nome: function (v) { return v !== ""; },
+      email: function (v) { return EMAIL_RE.test(v); },
+      mensagem: function (v) { return v !== ""; }
+    };
+    var firstInvalid = null;
+    Object.keys(checks).forEach(function (name) {
       var field = form.elements[name];
-      var ok = field.value.trim() !== "";
+      var ok = checks[name](field.value.trim());
       field.closest(".field").classList.toggle("has-error", !ok);
-      if (!ok) valid = false;
+      field.setAttribute("aria-invalid", String(!ok));
+      if (!ok && !firstInvalid) firstInvalid = field;
     });
 
-    if (!valid) {
-      note.textContent = "Preencha seu nome e a mensagem para continuar.";
-      note.classList.add("is-error");
+    if (firstInvalid) {
+      setNote("Preencha nome, um e-mail válido e a mensagem para continuar.", "error");
+      firstInvalid.focus();
       return;
     }
 
-    var nome = form.elements.nome.value.trim();
-    var empresa = form.elements.empresa.value.trim();
-    var servico = form.elements.servico.value;
-    var mensagem = form.elements.mensagem.value.trim();
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando…";
+    setNote("");
 
-    var subject = "Contato pelo site — " + servico;
-    var body =
-      "Nome: " + nome + "\n" +
-      (empresa ? "Empresa: " + empresa + "\n" : "") +
-      "Serviço: " + servico + "\n\n" +
-      mensagem;
-
-    window.location.href =
-      "mailto:" + EMAIL +
-      "?subject=" + encodeURIComponent(subject) +
-      "&body=" + encodeURIComponent(body);
-
-    note.classList.remove("is-error");
-    note.textContent = "Abrindo seu aplicativo de e-mail…";
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(new FormData(form)).toString()
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        form.reset();
+        setNote("Mensagem enviada! Obrigado pelo contato — retorno em breve.", "success");
+      })
+      .catch(function () {
+        setNote("Não foi possível enviar agora. Tente novamente ou escreva para joel.ducatti@gmail.com.", "error");
+      })
+      .then(function () {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = submitLabel;
+      });
   });
 })();
