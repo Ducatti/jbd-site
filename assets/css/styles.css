@@ -625,6 +625,24 @@ p  { margin: 0 0 1em; color: var(--text-muted); }
 }
 .status-page__box p { margin-bottom: 2rem; }
 
+/* ---------- Política de privacidade ---------- */
+.legal__top { border-bottom: 1px solid var(--border); padding: 18px 0; }
+.legal { padding: clamp(48px, 8vw, 88px) 0; }
+.legal__inner { max-width: 760px; }
+.legal h1 { font-size: clamp(2rem, 4.4vw, 3rem); }
+.legal h2 { font-size: 1.35rem; margin-top: 2.4rem; }
+.legal h3 { font-size: 1.05rem; margin: 1.4rem 0 0.4rem; }
+.legal ul,
+.legal ol { margin: 0 0 1em; padding-left: 1.3rem; color: var(--text-muted); }
+.legal li { margin-bottom: 0.45em; }
+.legal li::marker { color: var(--cyan); }
+.legal strong { color: var(--text); font-weight: 600; }
+.legal a:not(.btn) { color: var(--cyan); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.legal__updated { font-size: 0.9rem; color: var(--text-subtle); }
+.legal__back { margin-top: 3rem; }
+.legal + .footer { padding: 24px 0; }
+.legal + .footer .footer__bottom { margin-top: 0; padding-top: 0; border-top: 0; }
+
 /* ---------- Rodapé ---------- */
 .footer { border-top: 1px solid var(--border); padding: 48px 0 28px; background: var(--bg-alt); }
 .footer__inner {
