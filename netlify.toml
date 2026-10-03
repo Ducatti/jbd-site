@@ -2,6 +2,15 @@
 [build]
   publish = "."
 
+# Como a raiz inteira é publicada, o código-fonte das funções seria servido como
+# arquivo estático em /netlify/functions/… — `force` faz a regra valer mesmo
+# com o arquivo existindo.
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
